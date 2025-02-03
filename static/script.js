@@ -25,7 +25,22 @@ canvas.addEventListener('mouseup', () => {
     drawing = false;
 });
 
-// Clear canvas function
 function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function predictDigit() {
+    let canvasData = canvas.toDataURL('image/png');
+    fetch('/predict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ image: canvasData })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Predicted Digit: ' + data.prediction);
+    })
+    .catch(err => console.error('Error:', err));
 }
